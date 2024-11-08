@@ -1,0 +1,115 @@
+# NoSQL API REST Project for Data Storage Course by Sebastian Belalcazar Mosquera
+
+## Overview
+
+This project is a Node.js application that interacts with a Neo4j database to manage data related to athletes, teams, sports, and contracts. It was developed as a final project for the Data Storage course in the fourth semester at my university.
+
+## Database Schema
+
+The database schema consists of the following nodes and relationships:
+
+### Nodes
+
+- **Athlete**: Represents an athlete with properties such as name, country, position, number, gender, and birthDate.
+- **Team**: Represents a team with properties such as name and country.
+- **Sport**: Represents a sport with a property name.
+
+### Relationships
+
+- **PLAYS_FOR**: Connects an athlete to a team.
+- **PRACTICES**: Connects an athlete to a sport.
+- **CONTRACTED_BY**: Connects an athlete to a team with additional properties such as value, startDate, and endDate.
+
+## Database Initialization
+
+To initialise the database from scratch, follow these steps:
+
+1. **Start Neo4j**: Make sure your Neo4j database is running. You can start it using the Neo4j Desktop application or by running the following command in the terminal if you have Neo4j installed as a service:
+
+    ```sh
+    neo4j start
+    ```
+
+2. **Open Neo4j Browser**: Open the Neo4j Browser by navigating to `http://localhost:7474` in your web browser. Log in with your credentials.
+
+3. **Create Nodes and Relationships**: Run the following Cypher queries in the Neo4j Browser to create the database schema and populate it with some initial data:
+
+    ```cypher
+    // Create some athletes
+    CREATE (a1:Athlete {name: 'John Doe', country: 'UK', position: 'Forward', number: 10, gender: 'Male', birthDate: '1990-01-01'})
+    CREATE (a2:Athlete {name: 'Jane Smith', country: 'Canada', position: 'Guard', number: 12, gender: 'Female', birthDate: '1992-02-02'})
+    CREATE (a3:Athlete {name: 'Carlos Ruiz', country: 'Spain', position: 'Midfielder', number: 8, gender: 'Male', birthDate: '1988-03-03'})
+
+    // Create some teams
+    CREATE (t1:Team {name: 'Lakers', country: 'UK'})
+    CREATE (t2:Team {name: 'Raptors', country: 'Canada'})
+    CREATE (t3:Team {name: 'Barcelona', country: 'Spain'})
+
+    // Create some sports
+    CREATE (s1:Sport {name: 'Basketball'})
+    CREATE (s2:Sport {name: 'Football'})
+
+    // Create relationships between athletes and teams
+    MATCH (a1:Athlete {name: 'John Doe'}), (t1:Team {name: 'Lakers'})
+    CREATE (a1)-[:PLAYS_FOR]->(t1)
+
+    MATCH (a2:Athlete {name: 'Jane Smith'}), (t2:Team {name: 'Raptors'})
+    CREATE (a2)-[:PLAYS_FOR]->(t2)
+
+    MATCH (a3:Athlete {name: 'Carlos Ruiz'}), (t3:Team {name: 'Barcelona'})
+    CREATE (a3)-[:PLAYS_FOR]->(t3)
+
+    // Create relationships between athletes and sports
+    MATCH (a1:Athlete {name: 'John Doe'}), (s1:Sport {name: 'Basketball'})
+    CREATE (a1)-[:PRACTICES]->(s1)
+
+    MATCH (a2:Athlete {name: 'Jane Smith'}), (s1:Sport {name: 'Basketball'})
+    CREATE (a2)-[:PRACTICES]->(s1)
+
+    MATCH (a3:Athlete {name: 'Carlos Ruiz'}), (s2:Sport {name: 'Football'})
+    CREATE (a3)-[:PRACTICES]->(s2)
+
+    // Create some contracts
+    MATCH (a1:Athlete {name: 'John Doe'}), (t1:Team {name: 'Lakers'})
+    CREATE (a1)-[:CONTRACTED_BY {value: 2000000, startDate: '2022-01-01', endDate: '2023-01-01'}]->(t1)
+
+    MATCH (a2:Athlete {name: 'Jane Smith'}), (t2:Team {name: 'Raptors'})
+    CREATE (a2)-[:CONTRACTED_BY {value: 1500000, startDate: '2022-02-01', endDate: '2023-02-01'}]->(t2)
+
+    MATCH (a3:Athlete {name: 'Carlos Ruiz'}), (t3:Team {name: 'Barcelona'})
+    CREATE (a3)-[:CONTRACTED_BY {value: 3000000, startDate: '2022-03-01', endDate: '2023-03-01'}]->(t3)
+    ```
+
+## How to Execute
+
+1. **Clone the Repository**: Clone this repository to your local machine using the following command:
+
+    ```sh
+    git clone <repository-url>
+    ```
+
+2. **Install Dependencies**: Navigate to the project directory and install the required dependencies using npm:
+
+    ```sh
+    cd <project-directory>
+    npm install
+    ```
+
+3. **Set Up Environment Variables**: Create a `.env` file in the root directory of the project and add the following environment variables:
+
+    ```env
+    NEO4J_URI=bolt://localhost:7687
+    NEO4J_USER=neo4j
+    NEO4J_PASSWORD=<your-neo4j-password>
+    PORT=8080
+    ```
+
+4. **Start the Application**: Start the Node.js application using the following command:
+
+    ```sh
+    npm start
+    ```
+
+5. **Access the API**: The API will be running at `http://localhost:8080`. You can use tools like Postman or cURL to interact with the API endpoints.
+
+This project is an academic project developed for educational purposes. It demonstrates how to build a RESTful API using Node.js and Neo4j, and how to manage data related to athletes, teams, sports, and contracts.
